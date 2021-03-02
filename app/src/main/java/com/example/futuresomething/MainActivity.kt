@@ -9,66 +9,43 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var filmsAdapter: FilmListRecyclerAdapter
-    val filmsDataBase = listOf(
-        Film(0, "Film title", R.drawable.poster5, "This should be a description"),
-        Film(1, "Film title", R.drawable.poster6, "This should be a description"),
-        Film(3, "Film title", R.drawable.poster7, "This should be a description"),
-        Film(4, "Film title", R.drawable.poster8, "This should be a description"),
-        Film(5, "Film title", R.drawable.poster9, "This should be a description"),
-        Film(6, "Film title", R.drawable.poster10, "This should be a description"),
-        Film(7, "Film title", R.drawable.poster11, "This should be a description"),
-        Film(8, "Film title", R.drawable.poster12, "This should be a description")
-
-    )
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         initNavigation()
-        initRecycler()
-
+        iniFragment()
     }
 
-    fun initRecycler() {
-        //находим наш RV
-        main_recycler.apply {
-            //Инициализируем наш адаптер в конструктор передаем анонимно инициализированный интерфейс,
-            //оставим его пока пустым, он нам понадобится во второй части задания
-            filmsAdapter =
-                FilmListRecyclerAdapter(object : FilmListRecyclerAdapter.OnItemClickListener {
-                    override fun click(film: Film) {
-                        //Создаем бандл и кладем туда объект с данными фильма
-                        val bundle = Bundle()
-                        //Первым параметром указывается ключ, по которому потом будем искать, вторым сам
-                        //передаваемы объект
-                        bundle.putParcelable("film", film)
-                        //Запускаем наше активити
-                        val intent = Intent(this@MainActivity, DetailsActivity::class.java)
-                        //Прикрепляем бандл к интенту
-                        intent.putExtras(bundle)
-                        //Запускаем активити через интент
-                        startActivity(intent)
-                    }
-                })
-            //Присваиваем адаптер
-            adapter = filmsAdapter
-            //Присвои layoutmanager
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            //Применяем декоратор для отступов
-            val decorator = TopSpacingItemDecoration(8)
-            addItemDecoration(decorator)
-        }
-//Кладем нашу БД в RV
-            filmsAdapter.addItems(filmsDataBase)
+    fun launchDetailsFragment(film: Film) {
+        //Создаем "посылку"
+        val bundle = Bundle()
+        //Кладем наш фильм в "посылку"
+        bundle.putParcelable("film", film)
+        //Кладем фрагмент с деталями в перменную
+        val fragment = DetailsFragment()
+        //Прикрепляем нашу "посылку" к фрагменту
+        fragment.arguments = bundle
+
+        //Запускаем фрагмент
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_placeholder, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
+    fun iniFragment() {
+        supportFragmentManager
+            .beginTransaction()
+            .add(R.id.fragment_placeholder, HomeFragment())
+            .addToBackStack(null)
+            .commit()
+    }
 
     fun initNavigation() {
-        val snackbarFavorites = Snackbar.make(main_layout, R.string.favorites, Snackbar.LENGTH_SHORT)
-        val snackbarViewLater = Snackbar.make(main_layout, R.string.view_later, Snackbar.LENGTH_SHORT)
+        val snackbarFavorites = Snackbar.make(main, R.string.favorites, Snackbar.LENGTH_SHORT)
+        val snackbarViewLater = Snackbar.make(main, R.string.view_later, Snackbar.LENGTH_SHORT)
 
         topAppBar.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -90,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     true
                 }
-                R.id.watch_later -> {
+                R.id.watch_later     -> {
                     snackbarViewLater.show()
                     snackbarViewLater.setAction("Ok") {
                         snackbarFavorites.dismiss()
