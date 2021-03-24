@@ -2,7 +2,7 @@ package com.example.futuresomething
 
 import androidx.recyclerview.widget.DiffUtil
 
-class FilmDiffCallback(val oldList: List<Film>, val newList: List<Film>): DiffUtil.Callback() {
+class FilmDiffCallback(val oldList: List<Film>, val newList: List<Film>) : DiffUtil.Callback() {
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return oldList[oldItemPosition].id == newList[newItemPosition].id
     }

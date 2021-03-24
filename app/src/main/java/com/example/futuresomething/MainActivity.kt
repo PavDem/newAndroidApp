@@ -43,10 +43,11 @@ class MainActivity : AppCompatActivity() {
         bottom_navigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.favorites -> {
-                    snackbarFavorites.show()
-                    snackbarFavorites.setAction("Ok") {
-                        snackbarFavorites.dismiss()
-                    }
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.fragment_placeholder, FavoritesFragment())
+                        .addToBackStack(null)
+                        .commit()
                     true
                 }
                 R.id.watch_later -> {
