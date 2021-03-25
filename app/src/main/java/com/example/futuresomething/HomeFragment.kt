@@ -1,27 +1,28 @@
 package com.example.futuresomething
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_home.*
+import java.util.*
 
 
 class
 HomeFragment : Fragment() {
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
     private val filmsDataBase = listOf(
-        Film(0, "Film title", R.drawable.poster5, "This should be a description"),
-        Film(1, "Film title", R.drawable.poster6, "This should be a description"),
-        Film(3, "Film title", R.drawable.poster7, "This should be a description"),
-        Film(4, "Film title", R.drawable.poster8, "This should be a description"),
-        Film(5, "Film title", R.drawable.poster9, "This should be a description"),
-        Film(6, "Film title", R.drawable.poster10, "This should be a description"),
-        Film(7, "Film title", R.drawable.poster11, "This should be a description"),
-        Film(8, "Film title", R.drawable.poster12, "This should be a description")
+        Film(0, "Willy Wonka", R.drawable.willy_wonka, "Willy Wonka is extraordinary. He's a chocolate-making genius who relishes nonsense. He can't abide ugliness in factories. And he likes to make mischief, even if that means talking to the President of the United States whilst pretending to be a man from Mars, as he does in Charlie and the Great Glass Elevator."),
+        Film(1, "Film title", R.drawable.joker, "This should be a description"),
+        Film(3, "Film title", R.drawable.interstellar, "This should be a description"),
+        Film(4, "Film title", R.drawable.the_thing, "This should be a description"),
+        Film(5, "Film title", R.drawable.the_godfather, "This should be a description"),
+        Film(6, "Film title", R.drawable.akira, "This should be a description"),
+        Film(7, "Film title", R.drawable.the_shawshank_redemption, "This should be a description"),
+        Film(8, "Film title", R.drawable.deerskin, "This should be a description")
 
     )
 
@@ -36,6 +37,34 @@ HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initRecycler()
+
+        search_view.setOnClickListener {
+            search_view.isIconified = false
+        }
+
+        //Подключаем слушателя изменений введенного текста в поиска
+        search_view.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            //Этот метод отрабатывает при нажатии кнопки "поиск" на софт клавиатуре
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return true
+            }
+            //Этот метод отрабатывает на каждое изменения текста
+            override fun onQueryTextChange(newText: String): Boolean {
+                //Если ввод пуст то вставляем в адаптер всю БД
+                if (newText.isEmpty()) {
+                    filmsAdapter.addItems(filmsDataBase)
+                    return true
+                }
+                //Фильтруем список на поискк подходящих сочетаний
+                val result = filmsDataBase.filter {
+                    //Чтобы все работало правильно, нужно и запрос, и имя фильма приводить к нижнему регистру
+                    it.title.toLowerCase(Locale.getDefault()).contains(newText.toLowerCase(Locale.getDefault()))
+                }
+                //Добавляем в адаптер
+                filmsAdapter.addItems(result)
+                return true
+            }
+        })
     }
 
 
