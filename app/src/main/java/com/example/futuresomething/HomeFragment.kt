@@ -10,17 +10,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
-class HomeFragment : Fragment() {
+class
+HomeFragment : Fragment() {
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
     private val filmsDataBase = listOf(
-        Film(0, "Film title", R.drawable.poster5, "This should be a description", false),
-        Film(1, "Film title", R.drawable.poster6, "This should be a description", false),
-        Film(3, "Film title", R.drawable.poster7, "This should be a description", false),
-        Film(4, "Film title", R.drawable.poster8, "This should be a description", false),
-        Film(5, "Film title", R.drawable.poster9, "This should be a description", true),
-        Film(6, "Film title", R.drawable.poster10, "This should be a description", true),
-        Film(7, "Film title", R.drawable.poster11, "This should be a description", true),
-        Film(8, "Film title", R.drawable.poster12, "This should be a description", true)
+        Film(0, "Film title", R.drawable.poster5, "This should be a description"),
+        Film(1, "Film title", R.drawable.poster6, "This should be a description"),
+        Film(3, "Film title", R.drawable.poster7, "This should be a description"),
+        Film(4, "Film title", R.drawable.poster8, "This should be a description"),
+        Film(5, "Film title", R.drawable.poster9, "This should be a description"),
+        Film(6, "Film title", R.drawable.poster10, "This should be a description"),
+        Film(7, "Film title", R.drawable.poster11, "This should be a description"),
+        Film(8, "Film title", R.drawable.poster12, "This should be a description")
 
     )
 

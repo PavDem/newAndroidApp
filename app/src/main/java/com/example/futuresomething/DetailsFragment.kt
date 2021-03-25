@@ -1,15 +1,12 @@
 package com.example.futuresomething
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_details.*
-import java.io.File
 
 class DetailsFragment : Fragment() {
     private lateinit var film: Film
@@ -26,17 +23,15 @@ class DetailsFragment : Fragment() {
 
         setFilmsDetails()
 
-        details_fab_favorites.setImageResource(
-            if (film.isInFavorites) R.drawable.baseline_favorite_border_black_24dp
-            else R.drawable.baseline_favorite_white_24dp
-        )
-
         details_fab_favorites.setOnClickListener {
             if (!film.isInFavorites) {
+                PseudoFavoritesDataBase.data
                 details_fab_favorites.setImageResource(R.drawable.baseline_favorite_white_24dp)
+                PseudoFavoritesDataBase.data.addOrRemove(film)
                 film.isInFavorites = true
             } else {
                 details_fab_favorites.setImageResource(R.drawable.baseline_favorite_border_black_24dp)
+                PseudoFavoritesDataBase.data.addOrRemove(film)
                 film.isInFavorites = false
             }
         }
@@ -62,6 +57,7 @@ class DetailsFragment : Fragment() {
         //Получаем наш фильм из переданного бандла
         film = arguments?.get("film") as Film
 
+
         //Устанавливаем заголовок
         details_toolbar.title = film.title
         //Устанавливаем картинку
@@ -69,9 +65,10 @@ class DetailsFragment : Fragment() {
         //Устанавливаем описание
         details_description.text = film.description
 
+        film.isInFavorites = PseudoFavoritesDataBase.data.isFilmInFavorites(film)
         details_fab_favorites.setImageResource(
-            if (film.isInFavorites) R.drawable.baseline_favorite_border_black_24dp
-            else R.drawable.baseline_favorite_white_24dp
+            if (film.isInFavorites) R.drawable.baseline_favorite_white_24dp
+            else R.drawable.baseline_favorite_border_black_24dp
         )
     }
 }
