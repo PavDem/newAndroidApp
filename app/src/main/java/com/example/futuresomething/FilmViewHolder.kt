@@ -2,6 +2,7 @@ package com.example.futuresomething
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.film_item.view.*
 
 //В конструктор класс передается layout, который мы создали(film_item.xml)
@@ -17,6 +18,10 @@ class FilmViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         title.text = film.title
         //Устанавливаем постер
         poster.setImageResource(film.poster)
+        Glide.with(itemView)
+            .load(film.poster)
+            .centerCrop()
+            .into(poster)
         //Устанавливаем описание
         description.text = film.description
     }

@@ -1,23 +1,25 @@
-package com.example.futuresomething
+package com.example.futuresomething.fragments
 
 import android.os.Bundle
-import android.transition.Scene
-import android.transition.Slide
-import android.transition.TransitionManager
-import android.transition.TransitionSet
+import android.transition.*
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.futuresomething.*
+import com.example.futuresomething.activities.MainActivity
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.merge_home_screen_content.*
 import java.util.*
 
 
 class HomeFragment : Fragment() {
+    private var justStarted = true
+
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
     private val filmsDataBase = listOf(
         Film(
@@ -31,10 +33,21 @@ class HomeFragment : Fragment() {
         Film(4, "The Thing", R.drawable.the_thing, "This should be a description"),
         Film(5, "The Godfather", R.drawable.the_godfather, "This should be a description"),
         Film(6, "Akira", R.drawable.akira, "This should be a description"),
-        Film(7, "The Shawshank Redemption", R.drawable.the_shawshank_redemption, "This should be a description"),
+        Film(
+            7,
+            "The Shawshank Redemption",
+            R.drawable.the_shawshank_redemption,
+            "This should be a description"
+        ),
         Film(8, "Deerskin", R.drawable.deerskin, "This should be a description")
 
     )
+
+    init {
+        //lagging a bit, not sure how to improve, also affects card view shape
+        exitTransition = Fade(Fade.MODE_OUT).apply { duration = 800; }
+        reenterTransition = Fade(Fade.MODE_IN).apply { duration = 800; }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,26 +58,10 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val scene = Scene.getSceneForLayout(
-            home_fragment_root,
-            R.layout.merge_home_screen_content,
-            requireContext()
-        )
-        //Создаем анимацию выезда поля поиска сверху
-        val searchSlide = Slide(Gravity.TOP).addTarget(R.id.search_view)
-        //Создаем анимацию выезда RV снизу
-        val recyclerSlide = Slide(Gravity.BOTTOM).addTarget(R.id.main_recycler)
-        //Создаем экземпляр TransitionSet, который объединит все наши анимации
-        val customTransition = TransitionSet().apply {
-            //Устанавливаем время, за которое будет проходить анимация
-            duration = 500
-            //Добавляем сами анимации
-            addTransition(recyclerSlide)
-            addTransition(searchSlide)
-        }
-        //Также запускаем через TransitionManager, но вторым параметром передаем нашу кастомную анимацию
-        TransitionManager.go(scene, customTransition)
 
+        MainActivity().lifecycle.currentState
+
+        initTransition()
         initRecycler()
 
         search_view.setOnClickListener {
@@ -99,7 +96,34 @@ class HomeFragment : Fragment() {
     }
 
 
-    fun initRecycler() {
+    private fun initTransition() {
+        val scene = Scene.getSceneForLayout(
+            home_fragment_root,
+            R.layout.merge_home_screen_content,
+            requireContext()
+        )
+        //Создаем анимацию выезда поля поиска сверху
+        val searchSlide = Slide(Gravity.TOP).addTarget(R.id.search_view)
+        //Создаем анимацию выезда RV снизу
+        val recyclerSlide = Slide(Gravity.BOTTOM).addTarget(R.id.main_recycler)
+        //Создаем экземпляр TransitionSet, который объединит все наши анимации
+        val customTransition = TransitionSet().apply {
+            //Устанавливаем время, за которое будет проходить анимация
+            duration = 500
+            //Добавляем сами анимации
+            addTransition(recyclerSlide)
+            addTransition(searchSlide)
+        }
+        //Также запускаем через TransitionManager, но вторым параметром передаем нашу кастомную анимацию
+
+        //play only on app start
+        if (justStarted)
+            TransitionManager.go(scene, customTransition)
+        else TransitionManager.go(scene)
+        justStarted = false
+    }
+
+    private fun initRecycler() {
         //находим наш RV
         main_recycler.apply {
             //Инициализируем наш адаптер в конструктор передаем анонимно инициализированный интерфейс,
@@ -120,6 +144,15 @@ class HomeFragment : Fragment() {
         }
         //Кладем нашу БД в RV
         filmsAdapter.addItems(filmsDataBase)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        view?.setOnClickListener {
+            val a = activity as FragmentActivity
+            a.supportFragmentManager.beginTransaction().replace(R.id.container, DetailsFragment())
+                .addToBackStack("HomeFragment").commit()
+        }
     }
 
 }
