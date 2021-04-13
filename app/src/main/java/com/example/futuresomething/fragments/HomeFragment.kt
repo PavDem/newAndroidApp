@@ -12,8 +12,12 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.futuresomething.*
 import com.example.futuresomething.activities.MainActivity
+import kotlinx.android.synthetic.main.fragment_details.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.merge_home_screen_content.*
+import kotlinx.android.synthetic.main.merge_home_screen_content.main_recycler
+import kotlinx.android.synthetic.main.merge_home_screen_content.search_view
+
 import java.util.*
 
 
@@ -43,12 +47,6 @@ class HomeFragment : Fragment() {
 
     )
 
-    init {
-        //lagging a bit, not sure how to improve, also affects card view shape
-        exitTransition = Fade(Fade.MODE_OUT).apply { duration = 800; }
-        reenterTransition = Fade(Fade.MODE_IN).apply { duration = 800; }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,9 +57,8 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        MainActivity().lifecycle.currentState
+        AnimationHelper.performFragmentCircularRevealAnimation(home_fragment_root, requireActivity(), 1)
 
-        initTransition()
         initRecycler()
 
         search_view.setOnClickListener {
@@ -69,12 +66,11 @@ class HomeFragment : Fragment() {
         }
 
         //Подключаем слушателя изменений введенного текста в поиска
-        search_view.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        search_view.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             //Этот метод отрабатывает при нажатии кнопки "поиск" на софт клавиатуре
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
             }
-
             //Этот метод отрабатывает на каждое изменения текста
             override fun onQueryTextChange(newText: String): Boolean {
                 //Если ввод пуст то вставляем в адаптер всю БД
@@ -85,8 +81,7 @@ class HomeFragment : Fragment() {
                 //Фильтруем список на поискк подходящих сочетаний
                 val result = filmsDataBase.filter {
                     //Чтобы все работало правильно, нужно и запрос, и имя фильма приводить к нижнему регистру
-                    it.title.toLowerCase(Locale.getDefault())
-                        .contains(newText.toLowerCase(Locale.getDefault()))
+                    it.title.toLowerCase(Locale.getDefault()).contains(newText.toLowerCase(Locale.getDefault()))
                 }
                 //Добавляем в адаптер
                 filmsAdapter.addItems(result)
@@ -96,34 +91,7 @@ class HomeFragment : Fragment() {
     }
 
 
-    private fun initTransition() {
-        val scene = Scene.getSceneForLayout(
-            home_fragment_root,
-            R.layout.merge_home_screen_content,
-            requireContext()
-        )
-        //Создаем анимацию выезда поля поиска сверху
-        val searchSlide = Slide(Gravity.TOP).addTarget(R.id.search_view)
-        //Создаем анимацию выезда RV снизу
-        val recyclerSlide = Slide(Gravity.BOTTOM).addTarget(R.id.main_recycler)
-        //Создаем экземпляр TransitionSet, который объединит все наши анимации
-        val customTransition = TransitionSet().apply {
-            //Устанавливаем время, за которое будет проходить анимация
-            duration = 500
-            //Добавляем сами анимации
-            addTransition(recyclerSlide)
-            addTransition(searchSlide)
-        }
-        //Также запускаем через TransitionManager, но вторым параметром передаем нашу кастомную анимацию
-
-        //play only on app start
-        if (justStarted)
-            TransitionManager.go(scene, customTransition)
-        else TransitionManager.go(scene)
-        justStarted = false
-    }
-
-    private fun initRecycler() {
+    fun initRecycler() {
         //находим наш RV
         main_recycler.apply {
             //Инициализируем наш адаптер в конструктор передаем анонимно инициализированный интерфейс,
@@ -144,15 +112,6 @@ class HomeFragment : Fragment() {
         }
         //Кладем нашу БД в RV
         filmsAdapter.addItems(filmsDataBase)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        view?.setOnClickListener {
-            val a = activity as FragmentActivity
-            a.supportFragmentManager.beginTransaction().replace(R.id.container, DetailsFragment())
-                .addToBackStack("HomeFragment").commit()
-        }
     }
 
 }

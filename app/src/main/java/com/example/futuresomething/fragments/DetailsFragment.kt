@@ -8,18 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.futuresomething.AnimationHelper
 import com.example.futuresomething.Film
 import com.example.futuresomething.PseudoFavoritesDataBase
 import com.example.futuresomething.R
 import kotlinx.android.synthetic.main.fragment_details.*
+import kotlinx.android.synthetic.main.fragment_home.*
 
 class DetailsFragment : Fragment() {
     private lateinit var film: Film
-
-    init {
-        enterTransition = Slide(Gravity.TOP).apply { duration = 800; mode = Slide.MODE_IN}
-        returnTransition = Slide(Gravity.TOP).apply { duration = 800; Slide.MODE_OUT }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
