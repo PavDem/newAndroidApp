@@ -1,9 +1,13 @@
 package com.example.futuresomething.activities
 
+import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.vectordrawable.graphics.drawable.Animatable2Compat
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.example.futuresomething.Film
 import com.example.futuresomething.R
 import com.example.futuresomething.fragments.*
@@ -30,9 +34,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initNavigation() {
-        val snackbarFavorites = Snackbar.make(main, R.string.favorites, Snackbar.LENGTH_SHORT)
-        val snackbarViewLater = Snackbar.make(main, R.string.view_later, Snackbar.LENGTH_SHORT)
-
 
         bottom_navigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
@@ -113,6 +114,23 @@ class MainActivity : AppCompatActivity() {
             .addToBackStack(null)
             .commit()
     }
+
+    /*private fun iniSplashScreen() {
+        val animatedVectorDrawable = AnimatedVectorDrawableCompat.create(this, R.drawable.anim_vector)
+        //Устанавливаем animatedVectorDrawable в наше view
+        lottie_anim.setImageDrawable(animatedVectorDrawable)
+        //Добавляем коллбэк на конец анимации, чтобы опять её запустить
+        animatedVectorDrawable?.registerAnimationCallback(object :
+            Animatable2Compat.AnimationCallback() {
+            override fun onAnimationEnd(drawable: Drawable?) {
+                lottie_anim.post {
+                    animatedVectorDrawable.start()
+                }
+            }
+        })
+//Стартуем анимацию
+        animatedVectorDrawable?.start()
+    }*/
 
     companion object {
         const val TIME_INTERVAL = 2000
