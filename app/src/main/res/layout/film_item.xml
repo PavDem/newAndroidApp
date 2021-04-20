@@ -12,7 +12,7 @@
         android:translationZ="11dp"
         app:stroke="10"
         app:progress="77"
-        app:scale_size="40"
+        app:scale_size="30"
         android:layout_gravity="bottom|start"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
