@@ -10,16 +10,18 @@ import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.example.futuresomething.Film
 import com.example.futuresomething.R
+import com.example.futuresomething.databinding.ActivityMainBinding
 import com.example.futuresomething.fragments.*
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     private var backPressed = 0L
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         initNavigation()
         initFragment()
@@ -35,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initNavigation() {
 
-        bottom_navigation.setOnNavigationItemSelectedListener {
+        binding.bottomNavigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.home -> {
                     val tag = "home"

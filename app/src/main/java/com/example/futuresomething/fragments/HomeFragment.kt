@@ -8,21 +8,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.futuresomething.*
 import com.example.futuresomething.activities.MainActivity
-import kotlinx.android.synthetic.main.fragment_details.*
-import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.merge_home_screen_content.*
-import kotlinx.android.synthetic.main.merge_home_screen_content.main_recycler
-import kotlinx.android.synthetic.main.merge_home_screen_content.search_view
+import com.example.futuresomething.databinding.FragmentDetailsBinding
+import com.example.futuresomething.databinding.FragmentHomeBinding
 
 import java.util.*
 
 
 class HomeFragment : Fragment() {
-    private var justStarted = true
+    private lateinit var binding: FragmentHomeBinding
 
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
     private val filmsDataBase = listOf(
@@ -53,26 +49,27 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         AnimationHelper.performFragmentCircularRevealAnimation(
-            home_fragment_root,
+            binding.homeFragmentRoot,
             requireActivity(),
             1
         )
 
         initRecycler()
 
-        search_view.setOnClickListener {
-            search_view.isIconified = false
+        binding.searchView.setOnClickListener {
+            binding.searchView.isIconified = false
         }
 
         //Подключаем слушателя изменений введенного текста в поиска
-        search_view.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             //Этот метод отрабатывает при нажатии кнопки "поиск" на софт клавиатуре
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
@@ -101,7 +98,7 @@ class HomeFragment : Fragment() {
 
     fun initRecycler() {
         //находим наш RV
-        main_recycler.apply {
+        binding.mainRecycler.apply {
             //Инициализируем наш адаптер в конструктор передаем анонимно инициализированный интерфейс,
             //оставим его пока пустым, он нам понадобится во второй части задания
             filmsAdapter =

@@ -12,17 +12,19 @@ import com.example.futuresomething.AnimationHelper
 import com.example.futuresomething.Film
 import com.example.futuresomething.PseudoFavoritesDataBase
 import com.example.futuresomething.R
-import kotlinx.android.synthetic.main.fragment_details.*
-import kotlinx.android.synthetic.main.fragment_home.*
+import com.example.futuresomething.databinding.FragmentDetailsBinding
 
 class DetailsFragment : Fragment() {
     private lateinit var film: Film
+    private lateinit var binding: FragmentDetailsBinding
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_details, container, false)
+        binding = FragmentDetailsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,20 +32,20 @@ class DetailsFragment : Fragment() {
 
         setFilmsDetails()
 
-        details_fab_favorites.setOnClickListener {
+        binding.detailsFabFavorites.setOnClickListener {
             if (!film.isInFavorites) {
                 PseudoFavoritesDataBase.data
-                details_fab_favorites.setImageResource(R.drawable.baseline_favorite_white_24dp)
+                binding.detailsFabFavorites.setImageResource(R.drawable.baseline_favorite_white_24dp)
                 PseudoFavoritesDataBase.data.addOrRemove(film)
                 film.isInFavorites = true
             } else {
-                details_fab_favorites.setImageResource(R.drawable.baseline_favorite_border_black_24dp)
+                binding.detailsFabFavorites.setImageResource(R.drawable.baseline_favorite_border_black_24dp)
                 PseudoFavoritesDataBase.data.addOrRemove(film)
                 film.isInFavorites = false
             }
         }
 
-        details_fab_share.setOnClickListener {
+        binding.detailsFabShare.setOnClickListener {
             //Создаем интент
             val intent = Intent()
             //Указываем action с которым он запускается
@@ -66,14 +68,14 @@ class DetailsFragment : Fragment() {
 
 
         //Устанавливаем заголовок
-        details_toolbar.title = film.title
+        binding.detailsToolbar.title = film.title
         //Устанавливаем картинку
-        details_poster.setImageResource(film.poster)
+        binding.detailsPoster.setImageResource(film.poster)
         //Устанавливаем описание
-        details_description.text = film.description
+        binding.detailsDescription.text = film.description
 
         film.isInFavorites = PseudoFavoritesDataBase.data.isFilmInFavorites(film)
-        details_fab_favorites.setImageResource(
+        binding.detailsFabFavorites.setImageResource(
             if (film.isInFavorites) R.drawable.baseline_favorite_white_24dp
             else R.drawable.baseline_favorite_border_black_24dp
         )
