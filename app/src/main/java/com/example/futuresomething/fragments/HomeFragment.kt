@@ -63,7 +63,33 @@ class HomeFragment : Fragment() {
         )
 
         initRecycler()
+        initSearchBar()
+    }
 
+    private fun initRecycler() {
+        //находим наш RV
+        binding.mainRecycler.apply {
+            //Инициализируем наш адаптер в конструктор передаем анонимно инициализированный интерфейс,
+            //оставим его пока пустым, он нам понадобится во второй части задания
+            filmsAdapter =
+                FilmListRecyclerAdapter(object : FilmListRecyclerAdapter.OnItemClickListener {
+                    override fun click(film: Film) {
+                        (requireActivity() as MainActivity).launchDetailsFragment(film)
+                    }
+                })
+            //Присваиваем адаптер
+            adapter = filmsAdapter
+            //Присвои layoutmanager
+            layoutManager = LinearLayoutManager(requireContext())
+            //Применяем декоратор для отступов
+            val decorator = TopSpacingItemDecoration(8)
+            addItemDecoration(decorator)
+        }
+        //Кладем нашу БД в RV
+        filmsAdapter.addItems(filmsDataBase)
+    }
+
+    private fun initSearchBar() {
         binding.searchView.setOnClickListener {
             binding.searchView.isIconified = false
         }
@@ -93,30 +119,6 @@ class HomeFragment : Fragment() {
                 return true
             }
         })
-    }
-
-
-    fun initRecycler() {
-        //находим наш RV
-        binding.mainRecycler.apply {
-            //Инициализируем наш адаптер в конструктор передаем анонимно инициализированный интерфейс,
-            //оставим его пока пустым, он нам понадобится во второй части задания
-            filmsAdapter =
-                FilmListRecyclerAdapter(object : FilmListRecyclerAdapter.OnItemClickListener {
-                    override fun click(film: Film) {
-                        (requireActivity() as MainActivity).launchDetailsFragment(film)
-                    }
-                })
-            //Присваиваем адаптер
-            adapter = filmsAdapter
-            //Присвои layoutmanager
-            layoutManager = LinearLayoutManager(requireContext())
-            //Применяем декоратор для отступов
-            val decorator = TopSpacingItemDecoration(8)
-            addItemDecoration(decorator)
-        }
-        //Кладем нашу БД в RV
-        filmsAdapter.addItems(filmsDataBase)
     }
 
 }

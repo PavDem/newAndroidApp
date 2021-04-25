@@ -145,9 +145,9 @@ class RatingDonutView @JvmOverloads constructor(context: Context, attributeSet: 
         drawText(canvas)
     }
 
-    fun setProgress(pr: Int) {
+    fun setProgress(pr: Float) {
         //Кладем новое значение в наше поле класса
-        progress = pr
+        progress = pr.toInt()
         //Создаем краски с новыми цветами
         initPaint()
         //вызываем перерисовку View

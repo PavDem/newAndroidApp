@@ -1,7 +1,6 @@
 package com.example.futuresomething
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
 
 class PseudoFavoritesDataBase private constructor() {
     private val favoriteList = mutableListOf<Film>()
