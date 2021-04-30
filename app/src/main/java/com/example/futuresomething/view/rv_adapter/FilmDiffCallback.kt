@@ -1,6 +1,7 @@
-package com.example.futuresomething
+package com.example.futuresomething.view.rv_adapter
 
 import androidx.recyclerview.widget.DiffUtil
+import com.example.futuresomething.domain.Film
 
 class FilmDiffCallback(private val oldList: List<Film>, private val newList: List<Film>) :
     DiffUtil.Callback() {

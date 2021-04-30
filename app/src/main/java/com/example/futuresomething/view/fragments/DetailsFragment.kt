@@ -1,16 +1,13 @@
-package com.example.futuresomething.fragments
+package com.example.futuresomething.view.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.transition.Slide
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.futuresomething.AnimationHelper
-import com.example.futuresomething.Film
-import com.example.futuresomething.PseudoFavoritesDataBase
+import com.example.futuresomething.domain.Film
+import com.example.futuresomething.data.PseudoFavoritesDataBase
 import com.example.futuresomething.R
 import com.example.futuresomething.databinding.FragmentDetailsBinding
 

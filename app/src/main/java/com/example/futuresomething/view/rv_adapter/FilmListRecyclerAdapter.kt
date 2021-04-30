@@ -1,11 +1,12 @@
-package com.example.futuresomething
+package com.example.futuresomething.view.rv_adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.futuresomething.R
 import com.example.futuresomething.databinding.FilmItemBinding
+import com.example.futuresomething.domain.Film
 
 class FilmListRecyclerAdapter(private val clickListener: OnItemClickListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {

@@ -1,4 +1,4 @@
-package com.example.futuresomething
+package com.example.futuresomething.domain
 
 import android.os.Parcelable
 import android.widget.ImageView

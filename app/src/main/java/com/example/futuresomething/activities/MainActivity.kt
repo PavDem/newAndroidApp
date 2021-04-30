@@ -1,18 +1,13 @@
 package com.example.futuresomething.activities
 
-import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
-import androidx.vectordrawable.graphics.drawable.Animatable2Compat
-import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
-import com.example.futuresomething.Film
+import com.example.futuresomething.domain.Film
 import com.example.futuresomething.R
 import com.example.futuresomething.databinding.ActivityMainBinding
-import com.example.futuresomething.fragments.*
-import com.google.android.material.snackbar.Snackbar
+import com.example.futuresomething.view.fragments.*
 
 class MainActivity : AppCompatActivity() {
     private var backPressed = 0L

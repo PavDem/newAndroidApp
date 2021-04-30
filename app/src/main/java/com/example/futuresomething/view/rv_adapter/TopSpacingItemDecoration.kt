@@ -1,4 +1,4 @@
-package com.example.futuresomething
+package com.example.futuresomething.view.rv_adapter
 
 import android.content.res.Resources
 import android.graphics.Rect

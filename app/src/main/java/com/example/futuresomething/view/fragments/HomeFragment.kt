@@ -1,18 +1,23 @@
-package com.example.futuresomething.fragments
+package com.example.futuresomething.view.fragments
 
 import android.os.Bundle
 import android.transition.*
-import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.futuresomething.*
 import com.example.futuresomething.activities.MainActivity
-import com.example.futuresomething.databinding.FragmentDetailsBinding
 import com.example.futuresomething.databinding.FragmentHomeBinding
+import com.example.futuresomething.domain.Film
+import com.example.futuresomething.utils.AnimationHelper
+import com.example.futuresomething.view.rv_adapter.FilmListRecyclerAdapter
+import com.example.futuresomething.view.rv_adapter.TopSpacingItemDecoration
+import com.example.futuresomething.viewmodel.HomeFragmentViewModel
 
 import java.util.*
 
@@ -21,34 +26,29 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
 
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
-    private val filmsDataBase = listOf(
-        Film(
-            0,
-            "Willy Wonka",
-            R.drawable.willy_wonka,
-            "Willy Wonka is extraordinary. He's a chocolate-making genius who relishes nonsense. He can't abide ugliness in factories. And he likes to make mischief, even if that means talking to the President of the United States whilst pretending to be a man from Mars, as he does in Charlie and the Great Glass Elevator.",
-            5.7f
-        ),
-        Film(1, "JOKER", R.drawable.joker, "This should be a description", 8.7f),
-        Film(3, "INTERSTELLAR", R.drawable.interstellar, "This should be a description", 4.5f),
-        Film(4, "The Thing", R.drawable.the_thing, "This should be a description", 6.9f),
-        Film(5, "The Godfather", R.drawable.the_godfather, "This should be a description", 8.5f),
-        Film(6, "Akira", R.drawable.akira, "This should be a description", 6f),
-        Film(
-            7,
-            "The Shawshank Redemption",
-            R.drawable.the_shawshank_redemption,
-            "This should be a description",
-            5.4f
-        ),
-        Film(8, "Deerskin", R.drawable.deerskin, "This should be a description", 3.5f)
 
-    )
+    private val viewModel by lazy {
+        ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
+    }
+
+    private var filmsDataBase = listOf<Film>()
+        //Используем backing field
+        set(value) {
+            //Если придет такое же значение, то мы выходим из метода
+            if (field == value) return
+            //Если пришло другое значение, то кладем его в переменную
+            field = value
+            //Обновляем RV адаптер
+            filmsAdapter.addItems(field)
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>>{
+            filmsDataBase = it
+        })
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }

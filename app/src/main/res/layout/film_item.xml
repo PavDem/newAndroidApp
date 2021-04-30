@@ -6,7 +6,7 @@
     <data>
         <variable
             name="film"
-            type="com.example.futuresomething.Film" />
+            type="com.example.futuresomething.domain.Film" />
 
     </data>
 
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="150dp">
 
-        <com.example.futuresomething.RatingDonutView
+        <com.example.futuresomething.view.customviews.RatingDonutView
             android:id="@+id/rating_donut"
             android:layout_width="50dp"
             android:layout_height="50dp"

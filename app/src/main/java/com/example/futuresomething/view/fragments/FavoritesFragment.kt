@@ -1,4 +1,4 @@
-package com.example.futuresomething.fragments
+package com.example.futuresomething.view.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,8 +8,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.futuresomething.*
 import com.example.futuresomething.activities.MainActivity
-import com.example.futuresomething.databinding.FragmentDetailsBinding
 import com.example.futuresomething.databinding.FragmentFavoritesBinding
+import com.example.futuresomething.domain.Film
+import com.example.futuresomething.utils.AnimationHelper
+import com.example.futuresomething.view.rv_adapter.FilmListRecyclerAdapter
+import com.example.futuresomething.view.rv_adapter.TopSpacingItemDecoration
 
 class FavoritesFragment : Fragment() {
     private lateinit var binding: FragmentFavoritesBinding

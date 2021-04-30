@@ -1,4 +1,4 @@
-package com.example.futuresomething
+package com.example.futuresomething.utils
 
 import android.app.Activity
 import android.view.View

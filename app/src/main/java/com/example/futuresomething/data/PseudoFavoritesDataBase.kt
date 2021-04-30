@@ -1,6 +1,6 @@
-package com.example.futuresomething
+package com.example.futuresomething.data
 
-import android.os.Parcelable
+import com.example.futuresomething.domain.Film
 
 class PseudoFavoritesDataBase private constructor() {
     private val favoriteList = mutableListOf<Film>()

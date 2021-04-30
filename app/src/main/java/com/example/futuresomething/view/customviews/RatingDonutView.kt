@@ -1,9 +1,10 @@
-package com.example.futuresomething
+package com.example.futuresomething.view.customviews
 
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
+import com.example.futuresomething.R
 
 class RatingDonutView @JvmOverloads constructor(context: Context, attributeSet: AttributeSet? = null) : View(context, attributeSet) {
     //Овал для рисования сегментов прогресс бара
@@ -29,7 +30,7 @@ class RatingDonutView @JvmOverloads constructor(context: Context, attributeSet: 
             context.theme.obtainStyledAttributes(attributeSet, R.styleable.RatingDonutView, 0, 0)
         try {
             stroke = a.getFloat(
-                R.styleable.RatingDonutView_stroke, stroke)
+                    R.styleable.RatingDonutView_stroke, stroke)
             progress = a.getInt(R.styleable.RatingDonutView_progress, progress)
 
             scaleSize = a.getFloat(R.styleable.RatingDonutView_scale_size, scaleSize)
