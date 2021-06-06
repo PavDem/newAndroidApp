@@ -11,21 +11,9 @@ import kotlinx.android.synthetic.main.film_item.view.*
 
 @Parcelize
 data class Film(
-    val id: Int,
-    val title: String,
-    val poster: Int,
-    val description: String,
-    var rating: Float = 0f,
-    var isInFavorites: Boolean = false
-) : Parcelable {
-    companion object {
-        @JvmStatic
-        @BindingAdapter("imagePoster")
-        fun loadImage(view: ImageView, resource: Int) {
-            Glide.with(view)
-                .load(resource)
-                .centerCrop()
-                .into(view)
-        }
-    }
-}
+        val title: String,
+        val poster: String, //У нас будет приходить ссылка на картинку, так что теперь это String
+        val description: String,
+        var rating: Double = 0.0, //Приходит не целое число с API
+        var isInFavorites: Boolean = false
+) : Parcelable

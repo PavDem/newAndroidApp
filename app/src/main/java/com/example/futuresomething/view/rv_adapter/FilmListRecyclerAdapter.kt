@@ -1,58 +1,61 @@
 package com.example.futuresomething.view.rv_adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.futuresomething.data.ApiConstants
 import com.example.futuresomething.R
-import com.example.futuresomething.databinding.FilmItemBinding
 import com.example.futuresomething.domain.Film
+import com.example.futuresomething.view.rv_viewholders.FilmViewHolder
+import kotlinx.android.synthetic.main.film_item.view.*
 
 class FilmListRecyclerAdapter(private val clickListener: OnItemClickListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    class FilmViewHolder(var binding: FilmItemBinding) : RecyclerView.ViewHolder(binding.root)
 
+    //Здесь у нас хранится список элементов для RV
     private val items = mutableListOf<Film>()
 
+    //Этот метод нужно переопределить на возврат количества елементов в списке RV
     override fun getItemCount() = items.size
 
+    //В этом методе мы привязываем наш view holder и передаем туда "надутую" верстку нашего фильма
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        return FilmViewHolder(
-            DataBindingUtil.inflate(inflater, R.layout.film_item, parent, false)
-        )
+        return FilmViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.film_item, parent, false))
     }
 
+    //В этом методе будет привзяка полей из объекта Film, к view из film_item.xml
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         //Проверяем какой у нас ViewHolder
         when (holder) {
             is FilmViewHolder -> {
-                //привязываем dataBinding
-                holder.binding.film = items[position]
+                //Вызываем метод bind(), который мы создали и передаем туда объект
+                //из нашей базы данных с указанием позиции
+                holder.bind(items[position])
                 //Обрабатываем нажатие на весь элемент целиком(можно сделать на отдельный элемент
                 //напрмер, картинку) и вызываем метод нашего листенера, который мы получаем из
                 //конструктора адаптера
-                holder.binding.itemContainer.setOnClickListener {
+                holder.itemView.item_container.setOnClickListener {
                     clickListener.click(items[position])
                 }
             }
         }
     }
 
-    fun addItems(newItems: List<Film>) {
-        //val diffCallback = FilmDiffCallback(items, newFilms)
-        //val diffResult = DiffUtil.calculateDiff(diffCallback)
+    //Метод для добавления объектов в наш список
+    fun addItems(list: List<Film>) {
+        //Сначала очишаем(если не реализовать DiffUtils)
         items.clear()
-        items.addAll(newItems)
-        //calculating wrong size, in need of fix
-        //diffResult.dispatchUpdatesTo(this)
-        //temporal workaround
+        //Добавляем
+        items.addAll(list)
+        //Уведомляем RV, что пришел новый список и ему нужно заново все "привязывать"
         notifyDataSetChanged()
     }
 
+    //Интерфейс для обработки кликов
     interface OnItemClickListener {
         fun click(film: Film)
     }
-
-    //class FilmViewHolder(var binding: FilmItemBinding): RecyclerView.ViewHolder(binding.root)
 }
